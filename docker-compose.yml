@@ -1,0 +1,21 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: exclusive-perfum-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: exclusive
+      POSTGRES_PASSWORD: exclusive_dev
+      POSTGRES_DB: exclusive_perfum
+    ports:
+      - "5433:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U exclusive -d exclusive_perfum"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  pgdata:

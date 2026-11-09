@@ -1,0 +1,1379 @@
+ESPECIFICACIÓN DE REQUERIMIENTOS FUNCIONALES
+Sistema de Control de Ventas, Facturación, Cartera e Inversiones
+
+Versión: 1.0
+Fecha: 24/09/2026
+Tecnología objetivo: Next.js + PostgreSQL + Capacitor
+Tipo de aplicación: Web responsive + PWA + APK Android
+
+1. OBJETIVO DEL SISTEMA
+
+Desarrollar una aplicación para centralizar y sistematizar el control de las operaciones comerciales y financieras actualmente registradas manualmente.
+
+El sistema deberá permitir gestionar:
+
+Clientes.
+Productos.
+Ventas.
+Costos asociados a las ventas.
+Facturas.
+Fechas y cuotas de pago.
+Pagos y abonos.
+Cartera.
+Despachos.
+Inversores.
+Aportes de capital.
+Participación de inversores en las ventas.
+Cálculo y distribución de ganancias.
+Gastos.
+Flujo de caja.
+Reportes.
+Dashboard financiero.
+Auditoría de operaciones.
+
+El sistema deberá proporcionar trazabilidad completa desde la creación de una venta hasta su facturación, despacho, recaudo, cálculo de rentabilidad y distribución de ganancias.
+
+2. ALCANCE
+2.1 Alcance incluido
+
+La primera versión contempla:
+
+Autenticación de usuarios.
+Administración de clientes.
+Administración de productos.
+Registro de ventas.
+Registro de productos vendidos.
+Registro de costos.
+Generación y administración de facturas.
+Programación de pagos.
+Registro de pagos.
+Aplicación de pagos a facturas.
+Gestión de cartera.
+Gestión de despachos.
+Gestión de inversores.
+Registro de inversiones.
+Asociación de inversores a ventas.
+Cálculo de ganancias.
+Distribución de ganancias.
+Registro de pagos a inversores.
+Registro de gastos.
+Gestión de cuentas financieras.
+Dashboard.
+Reportes.
+Auditoría.
+Aplicación web responsive.
+Preparación para APK mediante Capacitor.
+3. ACTORES DEL SISTEMA
+ACT-001 — Administrador
+
+Usuario con acceso completo al sistema.
+
+Puede:
+
+Gestionar usuarios.
+Gestionar clientes.
+Gestionar productos.
+Crear y modificar ventas.
+Gestionar facturas.
+Registrar pagos.
+Gestionar cartera.
+Gestionar inversores.
+Registrar inversiones.
+Gestionar ganancias.
+Registrar gastos.
+Consultar reportes.
+Configurar parámetros del sistema.
+ACT-002 — Vendedor
+
+Puede:
+
+Consultar clientes.
+Crear clientes.
+Consultar productos.
+Crear ventas.
+Consultar ventas.
+Consultar estado de despacho.
+Consultar facturas.
+
+No podrá modificar información financiera sensible salvo que tenga permisos adicionales.
+
+ACT-003 — Financiero
+
+Puede:
+
+Consultar ventas.
+Gestionar facturas.
+Registrar pagos.
+Aplicar pagos.
+Gestionar cartera.
+Gestionar cuotas.
+Gestionar inversores.
+Registrar inversiones.
+Gestionar distribución de ganancias.
+Consultar reportes financieros.
+ACT-004 — Consulta
+
+Usuario con acceso únicamente a información autorizada.
+
+No podrá crear, modificar ni eliminar información financiera.
+
+4. MÓDULO DE AUTENTICACIÓN Y USUARIOS
+RF-AUT-001 — Inicio de sesión
+
+Descripción:
+El sistema deberá permitir a los usuarios autenticarse mediante correo electrónico y contraseña.
+
+Actor: Todos los usuarios.
+
+Precondiciones:
+
+El usuario debe estar registrado.
+El usuario debe estar activo.
+
+Flujo principal:
+
+El usuario introduce correo electrónico.
+Introduce contraseña.
+El sistema valida las credenciales.
+El sistema identifica los roles del usuario.
+El sistema genera la sesión.
+El usuario es dirigido al dashboard.
+
+Reglas:
+
+Las contraseñas deberán almacenarse utilizando hash seguro.
+Las credenciales incorrectas no deberán revelar información sensible.
+Un usuario inactivo no podrá autenticarse.
+RF-AUT-002 — Cierre de sesión
+
+El usuario podrá cerrar su sesión.
+
+El sistema deberá invalidar la sesión correspondiente.
+
+RF-AUT-003 — Gestión de usuarios
+
+El administrador podrá:
+
+Crear usuarios.
+Editar usuarios.
+Activar/desactivar usuarios.
+Asignar roles.
+Consultar usuarios.
+RF-AUT-004 — Gestión de roles
+
+El sistema deberá soportar roles y permisos.
+
+Un usuario podrá tener uno o varios roles.
+
+5. MÓDULO DE CLIENTES
+RF-CLI-001 — Crear cliente
+
+El sistema deberá permitir registrar un cliente.
+
+Información mínima
+Tipo de documento.
+Número de documento.
+Nombre.
+Teléfono.
+Correo.
+Dirección.
+Ciudad.
+Departamento.
+Observaciones.
+Estado.
+RF-CLI-002 — Editar cliente
+
+Los usuarios autorizados podrán modificar los datos del cliente.
+
+El sistema deberá conservar auditoría de modificaciones relevantes.
+
+RF-CLI-003 — Consultar cliente
+
+El usuario podrá consultar la información completa del cliente.
+
+RF-CLI-004 — Historial comercial
+
+El sistema deberá mostrar:
+
+Total de ventas.
+Total facturado.
+Total pagado.
+Saldo pendiente.
+Facturas pendientes.
+Facturas vencidas.
+Historial de pagos.
+Historial de ventas.
+RF-CLI-005 — Estado del cliente
+
+El sistema deberá permitir estados:
+
+ACTIVO.
+INACTIVO.
+BLOQUEADO.
+
+Un cliente bloqueado no podrá utilizarse en nuevas ventas si el usuario no tiene permiso especial.
+
+6. MÓDULO DE PRODUCTOS
+RF-PRO-001 — Crear producto
+
+El sistema permitirá crear productos con:
+
+SKU.
+Nombre.
+Descripción.
+Categoría.
+Marca.
+Unidad de medida.
+Costo de referencia.
+Precio de venta de referencia.
+Estado.
+RF-PRO-002 — Editar producto
+
+El usuario autorizado podrá modificar los datos del producto.
+
+RF-PRO-003 — Historial de precios
+
+El sistema deberá conservar el precio utilizado históricamente en cada venta.
+
+Modificar el precio actual de un producto no deberá modificar ventas anteriores.
+
+RF-PRO-004 — Desactivar producto
+
+Un producto podrá marcarse como inactivo.
+
+Los productos inactivos no podrán agregarse a nuevas ventas.
+
+7. MÓDULO DE VENTAS
+RF-VEN-001 — Crear venta
+
+El sistema deberá permitir crear una venta.
+
+La venta deberá contener:
+
+Número de venta.
+Cliente.
+Fecha.
+Productos.
+Cantidades.
+Precio unitario.
+Descuentos.
+Costos.
+Observaciones.
+Inversores asociados.
+RF-VEN-002 — Numeración automática
+
+El sistema deberá generar automáticamente un número único de venta.
+
+Formato sugerido:
+
+V-2026-000001
+
+El número no podrá repetirse.
+
+RF-VEN-003 — Agregar productos
+
+Una venta podrá contener uno o varios productos.
+
+Cada detalle deberá almacenar:
+
+Producto.
+Descripción histórica.
+Cantidad.
+Costo unitario.
+Precio unitario.
+Descuento.
+Subtotal.
+RF-VEN-004 — Cálculo del subtotal
+
+El sistema calculará:
+
+Subtotal = Cantidad × PrecioUnitario - Descuento
+
+El valor no deberá ser digitado manualmente cuando pueda calcularse.
+
+RF-VEN-005 — Costos de venta
+
+El sistema permitirá registrar costos asociados a la venta.
+
+Tipos:
+
+Costo del producto.
+Envío.
+Seguro.
+Comisión.
+Empaque.
+Impuestos.
+Otros.
+RF-VEN-006 — Cálculo de costo total
+
+El sistema calculará:
+
+CostoTotal = CostoProductos + CostosAdicionales
+
+RF-VEN-007 — Cálculo de ganancia
+
+El sistema calculará:
+
+Ganancia = IngresoVenta - CostoTotal
+
+RF-VEN-008 — Margen de ganancia
+
+El sistema calculará el porcentaje de margen:
+
+Margen = Ganancia / IngresoVenta × 100
+
+RF-VEN-009 — Estados de venta
+
+La venta deberá manejar como mínimo:
+
+BORRADOR.
+CONFIRMADA.
+CANCELADA.
+RF-VEN-010 — Modificación de venta
+
+Una venta en estado BORRADOR podrá modificarse libremente.
+
+Una venta CONFIRMADA tendrá restricciones.
+
+Si ya tiene factura o pagos asociados, no podrá modificarse directamente en campos financieros sin autorización.
+
+RF-VEN-011 — Cancelación
+
+Una venta podrá cancelarse si cumple las reglas definidas.
+
+La cancelación deberá quedar registrada en auditoría.
+
+8. MÓDULO DE FACTURACIÓN
+RF-FAC-001 — Crear factura
+
+El sistema permitirá generar una factura asociada a una venta.
+
+RF-FAC-002 — Numeración de factura
+
+La factura tendrá numeración única.
+
+Formato sugerido:
+
+FAC-2026-000001
+
+RF-FAC-003 — Datos de factura
+
+La factura deberá contener:
+
+Número.
+Cliente.
+Venta.
+Fecha de emisión.
+Fecha de vencimiento.
+Subtotal.
+Descuento.
+Impuestos.
+Envío.
+Seguro.
+Total.
+Estado.
+RF-FAC-004 — Cálculo del total
+
+El sistema deberá calcular automáticamente:
+
+Total = Subtotal - Descuentos + Impuestos + OtrosCargos
+
+RF-FAC-005 — Saldo de factura
+
+El sistema calculará:
+
+Saldo = TotalFactura - TotalPagosAplicados
+
+El saldo no podrá ser negativo.
+
+RF-FAC-006 — Estado financiero
+
+La factura deberá manejar:
+
+PENDIENTE.
+ABONADA.
+PAGADA.
+VENCIDA.
+ANULADA.
+RF-FAC-007 — Factura pagada
+
+Una factura será considerada PAGADA cuando:
+
+Saldo = 0
+
+RF-FAC-008 — Factura abonada
+
+Una factura será ABONADA cuando:
+
+0 < TotalPagado < TotalFactura
+
+RF-FAC-009 — Factura vencida
+
+Una factura será considerada vencida cuando:
+
+FechaActual > FechaVencimiento
+
+y:
+
+Saldo > 0
+
+9. MÓDULO DE CUOTAS Y PAGOS PROGRAMADOS
+RF-CUO-001 — Crear plan de pagos
+
+El sistema permitirá establecer un calendario de pagos para una factura.
+
+RF-CUO-002 — Crear cuotas
+
+Cada cuota tendrá:
+
+Número.
+Fecha de vencimiento.
+Valor programado.
+Valor pagado.
+Saldo.
+Estado.
+RF-CUO-003 — Estados de cuota
+PENDIENTE.
+PARCIAL.
+PAGADA.
+VENCIDA.
+RF-CUO-004 — Validación de cuotas
+
+La suma de las cuotas no deberá superar el valor de la factura.
+
+10. MÓDULO DE PAGOS
+RF-PAG-001 — Registrar pago
+
+El sistema permitirá registrar un pago.
+
+Datos:
+
+Número de pago.
+Fecha.
+Valor.
+Método.
+Referencia.
+Cliente.
+Observaciones.
+RF-PAG-002 — Métodos de pago
+
+El sistema deberá permitir configurar:
+
+Efectivo.
+Transferencia.
+Consignación.
+Tarjeta.
+PSE.
+Otro.
+RF-PAG-003 — Aplicar pago a factura
+
+Un pago podrá aplicarse a una factura.
+
+RF-PAG-004 — Pago distribuido
+
+Un mismo pago podrá aplicarse a varias facturas.
+
+Ejemplo:
+
+Pago:
+
+$1.000.000
+
+Aplicación:
+
+Factura A: $600.000.
+Factura B: $400.000.
+RF-PAG-005 — Validar aplicación
+
+El sistema no permitirá aplicar a una factura un valor superior a su saldo.
+
+RF-PAG-006 — Historial de pagos
+
+El sistema deberá mostrar:
+
+Fecha.
+Valor.
+Método.
+Factura.
+Usuario.
+Referencia.
+Aplicaciones.
+11. MÓDULO DE CARTERA
+RF-CAR-001 — Consulta general de cartera
+
+El sistema deberá mostrar:
+
+Total facturado.
+Total cobrado.
+Total pendiente.
+Total vencido.
+Total por vencer.
+RF-CAR-002 — Cartera por cliente
+
+El sistema permitirá consultar la cartera individual de cada cliente.
+
+RF-CAR-003 — Cartera vencida
+
+El sistema deberá identificar automáticamente las facturas vencidas.
+
+RF-CAR-004 — Antigüedad de cartera
+
+La cartera deberá clasificarse:
+
+0–30 días.
+31–60 días.
+61–90 días.
+91–120 días.
+Más de 120 días.
+RF-CAR-005 — Filtros
+
+El usuario podrá filtrar por:
+
+Cliente.
+Fecha.
+Estado.
+Rango de vencimiento.
+Valor.
+Número de factura.
+12. MÓDULO DE DESPACHOS
+RF-DES-001 — Crear despacho
+
+El sistema permitirá registrar el despacho de una venta.
+
+RF-DES-002 — Información del despacho
+
+Debe contener:
+
+Fecha.
+Transportadora.
+Número de guía.
+Costo de envío.
+Seguro.
+Fecha estimada de entrega.
+Fecha de entrega.
+Observaciones.
+RF-DES-003 — Estados de despacho
+PENDIENTE.
+PREPARANDO.
+DESPACHADO.
+EN_TRANSITO.
+ENTREGADO.
+DEVUELTO.
+RF-DES-004 — Consulta de despacho
+
+El usuario podrá consultar el estado del despacho desde la venta.
+
+13. MÓDULO DE INVERSORES
+RF-INV-001 — Crear inversor
+
+Datos:
+
+Nombre.
+Documento.
+Teléfono.
+Correo.
+Fecha de ingreso.
+Estado.
+Observaciones.
+RF-INV-002 — Editar inversor
+
+Los usuarios autorizados podrán modificar los datos del inversor.
+
+RF-INV-003 — Historial financiero
+
+El sistema deberá mostrar:
+
+Aportes.
+Retiros.
+Capital disponible.
+Capital utilizado.
+Ventas financiadas.
+Ganancias.
+Ganancias pagadas.
+Ganancias pendientes.
+14. MÓDULO DE INVERSIONES
+RF-ITV-001 — Registrar aporte
+
+El sistema permitirá registrar aportes de capital.
+
+Datos:
+
+Inversor.
+Fecha.
+Valor.
+Cuenta financiera.
+Referencia.
+Observaciones.
+RF-ITV-002 — Registrar retiro
+
+Permitirá registrar retiros de capital.
+
+RF-ITV-003 — Tipos de movimiento
+APORTE.
+RETIRO.
+DEVOLUCIÓN.
+AJUSTE.
+RF-ITV-004 — Saldo de inversión
+
+El sistema calculará:
+
+CapitalActual = Aportes - Retiros
+
+15. MÓDULO DE PARTICIPACIÓN DE INVERSORES
+RF-PINV-001 — Asociar inversores a venta
+
+Una venta podrá tener uno o varios inversores.
+
+RF-PINV-002 — Registrar participación
+
+Para cada inversor se deberá registrar:
+
+Inversor.
+Monto aportado.
+Porcentaje de participación.
+Porcentaje de ganancia.
+Ganancia asignada.
+RF-PINV-003 — Validar participación
+
+El sistema deberá validar que la suma de participaciones cumpla la configuración definida.
+
+Por defecto:
+
+ParticipaciónTotal = 100%
+
+RF-PINV-004 — Calcular ganancia del inversor
+
+El sistema deberá calcular automáticamente la ganancia correspondiente según la regla de distribución configurada.
+
+16. MÓDULO DE GANANCIAS
+RF-GAN-001 — Calcular ganancia de venta
+
+El sistema calculará:
+
+Ganancia = Ingresos - Costos
+
+RF-GAN-002 — Registrar ganancia por inversor
+
+La ganancia de la venta deberá distribuirse según las participaciones registradas.
+
+RF-GAN-003 — Estados de ganancia
+GENERADA.
+PENDIENTE_PAGO.
+PAGADA.
+ANULADA.
+RF-GAN-004 — Registrar pago de ganancia
+
+El sistema permitirá registrar el pago realizado a un inversor.
+
+RF-GAN-005 — Historial de ganancias
+
+El sistema deberá mostrar por inversor:
+
+Ganancia histórica.
+Ganancia pendiente.
+Ganancia pagada.
+Fecha de generación.
+Fecha de pago.
+17. MÓDULO DE GASTOS
+RF-GAS-001 — Registrar gasto
+
+El sistema permitirá registrar gastos generales.
+
+Datos:
+
+Categoría.
+Descripción.
+Fecha.
+Valor.
+Cuenta financiera.
+Método de pago.
+Observaciones.
+RF-GAS-002 — Categorías de gasto
+
+Se podrán configurar categorías como:
+
+Publicidad.
+Transporte.
+Software.
+Hosting.
+Comisiones.
+Administración.
+Papelería.
+Bancarios.
+Otros.
+18. MÓDULO DE CUENTAS FINANCIERAS
+RF-CUE-001 — Crear cuenta financiera
+
+El sistema permitirá registrar:
+
+Caja.
+Cuenta bancaria.
+Billetera digital.
+Otras cuentas.
+RF-CUE-002 — Movimientos financieros
+
+Cada cuenta deberá registrar:
+
+Ingresos.
+Egresos.
+Transferencias.
+RF-CUE-003 — Saldo
+
+El sistema calculará:
+
+Saldo = SaldoInicial + Ingresos - Egresos
+
+19. DASHBOARD
+RF-DAS-001 — Dashboard general
+
+El sistema deberá mostrar:
+
+Ventas.
+Facturación.
+Recaudo.
+Cartera.
+Ganancias.
+Gastos.
+Inversiones.
+RF-DAS-002 — Ventas
+
+Mostrar:
+
+Ventas del día.
+Ventas del mes.
+Ventas del año.
+Número de operaciones.
+Valor promedio.
+RF-DAS-003 — Cartera
+
+Mostrar:
+
+Total pendiente.
+Total vencido.
+Total por vencer.
+Distribución por antigüedad.
+RF-DAS-004 — Ganancias
+
+Mostrar:
+
+Ganancia bruta.
+Gastos.
+Ganancia neta.
+Margen promedio.
+RF-DAS-005 — Inversiones
+
+Mostrar:
+
+Capital total.
+Capital utilizado.
+Capital disponible.
+Ganancia generada.
+Ganancia pagada.
+Ganancia pendiente.
+RF-DAS-006 — Inversores
+
+Mostrar indicadores individuales:
+
+Capital aportado.
+Capital utilizado.
+Ganancia.
+Rentabilidad.
+Ganancia pendiente.
+Ganancia pagada.
+RF-DAS-007 — Alertas
+
+Mostrar alertas para:
+
+Facturas vencidas.
+Facturas próximas a vencer.
+Ventas pendientes de despacho.
+Cuotas vencidas.
+Pagos pendientes.
+Ganancias pendientes de pago.
+20. REPORTES
+RF-REP-001 — Reporte de ventas
+
+Filtros:
+
+Fecha.
+Cliente.
+Producto.
+Estado.
+Usuario.
+RF-REP-002 — Reporte de facturación
+
+Mostrar:
+
+Factura.
+Cliente.
+Fecha.
+Total.
+Pagado.
+Saldo.
+Estado.
+RF-REP-003 — Reporte de cartera
+
+Mostrar:
+
+Cliente.
+Factura.
+Fecha.
+Vencimiento.
+Total.
+Pagado.
+Saldo.
+Días vencidos.
+RF-REP-004 — Reporte de rentabilidad
+
+Mostrar:
+
+Venta.
+Ingresos.
+Costos.
+Ganancia.
+Margen.
+RF-REP-005 — Reporte de inversores
+
+Mostrar:
+
+Inversor.
+Aportes.
+Retiros.
+Capital actual.
+Capital utilizado.
+Ganancia.
+Ganancia pagada.
+Ganancia pendiente.
+RF-REP-006 — Flujo de caja
+
+Mostrar:
+
+Ingresos.
+Egresos.
+Inversiones.
+Gastos.
+Pagos a inversores.
+Saldo.
+RF-REP-007 — Exportación
+
+Los reportes deberán poder exportarse inicialmente a:
+
+Excel.
+CSV.
+PDF.
+21. AUDITORÍA
+RF-AUD-001 — Registrar cambios
+
+El sistema deberá registrar operaciones críticas.
+
+Como mínimo:
+
+Crear.
+Modificar.
+Anular.
+Registrar pago.
+Aplicar pago.
+Modificar factura.
+Registrar inversión.
+Registrar ganancia.
+Registrar pago a inversor.
+RF-AUD-002 — Información de auditoría
+
+Debe almacenarse:
+
+Usuario.
+Fecha.
+Hora.
+Entidad.
+Registro afectado.
+Acción.
+Datos anteriores.
+Datos nuevos.
+RF-AUD-003 — Consulta de auditoría
+
+El administrador podrá consultar el historial de cambios.
+
+22. REGLAS DE NEGOCIO
+RN-001 — Unicidad de venta
+
+No pueden existir dos ventas con el mismo número.
+
+RN-002 — Unicidad de factura
+
+No pueden existir dos facturas con el mismo número.
+
+RN-003 — Saldo de factura
+
+El saldo será calculado por el sistema.
+
+RN-004 — No sobrepago
+
+Nunca podrá aplicarse un pago superior al saldo de una factura.
+
+RN-005 — Integridad de cuotas
+
+La suma de las cuotas no podrá superar el valor de la factura.
+
+RN-006 — Integridad de participación
+
+La suma de participaciones de una venta deberá cumplir la regla configurada.
+
+Por defecto:
+
+100%
+
+RN-007 — Historial financiero
+
+Los registros financieros no deberán eliminarse físicamente cuando tengan operaciones relacionadas.
+
+Se utilizarán estados como:
+
+ANULADO
+
+RN-008 — Histórico de precios
+
+Modificar el precio de un producto no modificará ventas históricas.
+
+RN-009 — Cálculos automáticos
+
+Los siguientes valores deberán calcularse automáticamente:
+
+Subtotales.
+Total factura.
+Saldo.
+Ganancia.
+Margen.
+Ganancia del inversor.
+Saldo de inversión.
+RN-010 — Factura vencida
+
+Una factura pendiente cuyo vencimiento haya pasado será identificada como vencida.
+
+RN-011 — Trazabilidad
+
+Todo movimiento financiero deberá poder relacionarse con su origen.
+
+Ejemplo:
+
+Pago
+ ↓
+Factura
+ ↓
+Venta
+ ↓
+Cliente
+RN-012 — Trazabilidad de inversión
+
+El sistema deberá poder responder:
+
+¿De dónde salió el capital utilizado
+para financiar esta venta?
+
+Por lo tanto, las inversiones y participaciones deberán conservar su relación histórica.
+
+23. REQUERIMIENTOS NO FUNCIONALES
+RNF-001 — Tecnología
+
+Frontend:
+
+Next.js.
+React.
+TypeScript.
+
+Backend:
+
+Next.js API / Server Actions.
+
+Base de datos:
+
+PostgreSQL.
+
+ORM:
+
+Prisma.
+RNF-002 — Responsive
+
+La interfaz deberá adaptarse a:
+
+Desktop.
+Tablet.
+Smartphone.
+RNF-003 — PWA
+
+La aplicación deberá poder instalarse como PWA.
+
+RNF-004 — APK
+
+La aplicación deberá poder empaquetarse mediante Capacitor para Android.
+
+RNF-005 — Seguridad
+
+La aplicación deberá utilizar:
+
+HTTPS.
+Hash seguro de contraseñas.
+Control de sesiones.
+RBAC.
+Validación de datos.
+Protección contra acceso no autorizado.
+RNF-006 — Integridad transaccional
+
+Las operaciones financieras críticas deberán ejecutarse dentro de transacciones PostgreSQL.
+
+Ejemplo:
+
+Registrar pago:
+
+BEGIN
+
+Crear pago
+      ↓
+Aplicar pago
+      ↓
+Actualizar estado factura
+      ↓
+Actualizar cuota
+      ↓
+Registrar auditoría
+
+COMMIT
+
+Si ocurre un error:
+
+ROLLBACK
+RNF-007 — Rendimiento
+
+Las consultas de dashboard y cartera deberán utilizar consultas optimizadas e índices adecuados.
+
+RNF-008 — Backups
+
+La base de datos deberá contar con:
+
+Backup diario.
+Retención configurable.
+Backup externo al servidor principal.
+Procedimiento de restauración probado.
+RNF-009 — Logs
+
+La aplicación deberá generar logs técnicos para:
+
+Errores.
+Autenticación.
+Operaciones críticas.
+Fallos de integración.
+24. MODELO DE DATOS CONCEPTUAL
+
+Las principales entidades serán:
+
+User
+Role
+Permission
+
+Customer
+
+Product
+ProductCategory
+
+Sale
+SaleItem
+SaleCost
+
+Invoice
+InvoiceInstallment
+
+Payment
+PaymentAllocation
+
+Shipment
+
+Investor
+Investment
+SaleInvestor
+ProfitDistribution
+InvestorPayment
+
+Expense
+ExpenseCategory
+
+FinancialAccount
+FinancialTransaction
+
+AuditLog
+25. RELACIONES PRINCIPALES
+CUSTOMER
+   │
+   └── SALE
+        │
+        ├── SALE_ITEM
+        │       └── PRODUCT
+        │
+        ├── SALE_COST
+        │
+        ├── SALE_INVESTOR
+        │       └── INVESTOR
+        │
+        ├── SHIPMENT
+        │
+        └── INVOICE
+                │
+                ├── INSTALLMENT
+                │
+                └── PAYMENT_ALLOCATION
+                         │
+                         └── PAYMENT
+
+Inversiones:
+
+INVESTOR
+   │
+   ├── INVESTMENT
+   │
+   ├── SALE_INVESTOR
+   │
+   └── PROFIT_DISTRIBUTION
+
+Finanzas:
+
+FINANCIAL_ACCOUNT
+       │
+       └── FINANCIAL_TRANSACTION
+26. FASES DE DESARROLLO
+FASE 1 — Fundaciones
+Proyecto Next.js.
+PostgreSQL.
+Prisma.
+Autenticación.
+Usuarios.
+Roles.
+Layout.
+Navegación.
+Auditoría.
+FASE 2 — Operación comercial
+Clientes.
+Productos.
+Ventas.
+Detalle de ventas.
+Costos.
+Despachos.
+FASE 3 — Facturación y cartera
+Facturas.
+Cuotas.
+Pagos.
+Aplicación de pagos.
+Cartera.
+Alertas.
+FASE 4 — Inversionistas
+Inversores.
+Inversiones.
+Participación por venta.
+Ganancias.
+Distribución.
+Pagos a inversores.
+FASE 5 — Finanzas
+Cuentas financieras.
+Gastos.
+Movimientos.
+Flujo de caja.
+FASE 6 — Inteligencia y reportes
+Dashboard.
+Indicadores.
+Reportes.
+Exportación.
+Gráficos.
+FASE 7 — Mobile
+PWA.
+Capacitor.
+APK.
+Notificaciones.
+Funcionalidad offline selectiva.
+27. CRITERIOS GENERALES DE ACEPTACIÓN
+
+El sistema será considerado funcionalmente operativo cuando:
+
+Se pueda crear un cliente.
+Se pueda crear un producto.
+Se pueda registrar una venta.
+La venta genere automáticamente sus cálculos.
+Se puedan registrar costos.
+Se pueda generar una factura.
+Se puedan configurar fechas de pago.
+Se puedan registrar pagos parciales.
+Un pago pueda aplicarse a una o varias facturas.
+El saldo se calcule automáticamente.
+Se identifique la cartera vencida.
+Se puedan registrar inversores.
+Se puedan registrar aportes.
+Una venta pueda tener varios inversores.
+Se pueda calcular la ganancia.
+Se pueda distribuir la ganancia.
+Se puedan registrar pagos a inversores.
+El dashboard refleje los datos financieros.
+Los movimientos críticos queden auditados.
+La información pueda consultarse desde computador y móvil.
+28. PENDIENTES DE DEFINICIÓN FUNCIONAL
+
+Antes de iniciar el desarrollo de la base de datos deberán definirse explícitamente:
+
+PF-001 — Modelo de ganancia
+
+Determinar si la ganancia se calcula sobre:
+
+Valor facturado.
+Valor efectivamente cobrado.
+Venta menos costos.
+Venta menos costos y gastos generales.
+PF-002 — Distribución de ganancias
+
+Definir si se distribuye según:
+
+Porcentaje de capital.
+Porcentaje pactado.
+Monto aportado.
+Otro mecanismo.
+PF-003 — Momento de generación de ganancia
+
+Definir si la ganancia se genera:
+
+Al crear la venta.
+Al confirmar la venta.
+Al facturar.
+Al despachar.
+Al cobrar.
+PF-004 — Pago de ganancias
+
+Definir si la ganancia del inversor se paga:
+
+Automáticamente.
+Manualmente.
+Al completar el cobro de la factura.
+Según calendario.
+PF-005 — Devoluciones
+
+Definir tratamiento para:
+
+Devolución parcial.
+Devolución total.
+Producto defectuoso.
+Cancelación.
+Pérdida de mercancía.
+PF-006 — Impuestos
+
+Definir si el sistema debe manejar:
+
+IVA.
+Retenciones.
+Otros impuestos.
+O únicamente control interno de ventas.
+PF-007 — Facturación electrónica
+
+Definir si la factura será:
+
+Documento interno de control.
+Factura comercial.
+Factura electrónica DIAN.
+PF-008 — Multiempresa
+
+Definir si el sistema será utilizado únicamente por un negocio o si en el futuro deberá soportar múltiples empresas/negocios.
+
+PF-009 — Moneda
+
+Definir si únicamente se manejará COP o si se requerirán otras monedas.
+
+PF-010 — Inventario
+
+Definir si el sistema deberá controlar existencias físicas de productos o únicamente registrar los productos vendidos.
+
+29. RECOMENDACIÓN DE ARQUITECTURA DE DOMINIO
+
+Para evitar que el sistema se convierta en un conjunto de CRUD independientes, el dominio debería organizarse alrededor de estos agregados:
+
+COMERCIAL
+│
+├── Customer
+├── Product
+└── Sale
+
+FACTURACIÓN
+│
+├── Invoice
+├── Installment
+└── Payment
+
+LOGÍSTICA
+│
+└── Shipment
+
+FINANCIERO
+│
+├── FinancialAccount
+├── Expense
+└── FinancialTransaction
+
+INVERSIÓN
+│
+├── Investor
+├── Investment
+├── SaleInvestor
+└── ProfitDistribution
+
+SEGURIDAD
+│
+├── User
+├── Role
+└── AuditLog
+
+Esto permitirá que posteriormente el código de Next.js se organice por dominio y no únicamente por pantallas.
+
+30. RESULTADO ESPERADO
+
+El sistema deberá permitir pasar de un proceso manual como:
+
+CUADERNO
+
+Venta 001
+Cliente X
+Producto X
+Costo...
+Precio...
+Envío...
+Ganancia...
+Abono...
+Saldo...
+
+a una operación estructurada:
+
+                    ┌──────────────┐
+                    │   CLIENTE    │
+                    └──────┬───────┘
+                           │
+                    ┌──────▼───────┐
+                    │    VENTA     │
+                    └──────┬───────┘
+                           │
+             ┌─────────────┼─────────────┐
+             │             │             │
+        PRODUCTOS       COSTOS       INVERSORES
+             │             │             │
+             └─────────────┼─────────────┘
+                           │
+                    ┌──────▼───────┐
+                    │   FACTURA    │
+                    └──────┬───────┘
+                           │
+                    ┌──────▼───────┐
+                    │    CUOTAS    │
+                    └──────┬───────┘
+                           │
+                    ┌──────▼───────┐
+                    │    PAGOS     │
+                    └──────┬───────┘
+                           │
+              ┌────────────┴────────────┐
+              │                         │
+          CARTERA                    GANANCIA
+                                        │
+                              ┌─────────┴─────────┐
+                              │                   │
+                         INVERSOR A          INVERSOR B
+
+El resultado final será una plataforma capaz de mostrar no solamente qué vendiste, sino también cuánto debes cobrar, cuánto dinero has invertido, dónde está el capital, cuánto has ganado y cuánto corresponde a cada inversor.
